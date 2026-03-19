@@ -18,7 +18,7 @@
 5. 主屏幕出现绿色图标，点开就是全屏 App！
 
 ## 文件说明
-- `public/index.html` — 主应用
+- `public/index.html — 主应用
 - `public/manifest.json` — PWA 配置（图标、名称、颜色）
 - `public/sw.js` — 离线缓存
 - `public/icon-192.png` / `icon-512.png` — App 图标
