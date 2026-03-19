@@ -6,7 +6,7 @@
 2. 点 **Add New → Project**
 3. 选 **Upload** 标签页
 4. 把这整个文件夹（scheduler-app）拖进去上传
-5. 点 **Deploy** → 等 30 秒
+5. 点 **Deploy** → 等 30秒
 6. 得到网址，例如 `your-app.vercel.app`
 
 ## 添加到 iPhone 主屏幕（变成 App）
