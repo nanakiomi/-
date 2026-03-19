@@ -1039,12 +1039,17 @@ body::before {
     render();
     </script>
 
-    <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      });
+   <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
     }
-    </script>
-    </body>
-    </html>
+  });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js?v=' + new Date().getTime()).catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
