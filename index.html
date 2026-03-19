@@ -524,27 +524,89 @@ function parseText(text) {
 function showPreview(data) {
   var pa = document.getElementById('previewArea');
   if (!pa) return;
-  pa.style.removeProperty('display');
+  pa.innerHTML = '';
   pa.style.display = 'block';
-  var colorOpts = COLORS.map(function(c) {
-    return '<option value="' + c + '"' + (c===data.color?' selected':'') + '>' + (COLOR_LABELS[c]||c) + '</option>';
-  }).join('');
-  var chips = [0,5,10,15,30,60].map(function(m) {
-    return '<button class="rchip' + (m===(data.reminder||10)?' sel':'') + '" onclick="selChip(this,' + m + ')">' + (m===0?'不提醒':m+'分钟前') + '</button>';
-  }).join('');
-  pa.innerHTML = '<div class="preview-card">'
-    + '<div class="pv-head"><span class="pv-badge">已识别</span><span class="pv-hint">确认或修改后添加</span></div>'
-    + '<div class="pv-body">'
-    + '<div class="pf pv-full"><label>标题</label><input type="text" id="pTitle" value="' + esc(data.title) + '"></div>'
-    + '<div class="pf"><label>日期</label><input type="date" id="pDate" value="' + data.date + '"></div>'
-    + '<div class="pf"><label>颜色分类</label><select id="pColor">' + colorOpts + '</select></div>'
-    + '<div class="pf"><label>开始时间</label><input type="time" id="pStart" value="' + data.startTime + '"></div>'
-    + '<div class="pf"><label>结束时间</label><input type="time" id="pEnd" value="' + data.endTime + '"></div>'
-    + '<div class="pf pv-full"><label>提前提醒</label><div class="rchips">' + chips + '</div><input type="hidden" id="pReminder" value="' + (data.reminder||10) + '"></div>'
-    + '<div class="pf pv-full"><label>备注</label><input type="text" id="pNote" value="' + esc(data.note||'') + '" placeholder="可选"></div>'
-    + '</div>'
-    + '<div class="pv-foot"><button class="btn-cancel" onclick="closePreview()">取消</button><button class="btn-confirm" onclick="confirmAdd()">✓ 确认添加</button></div>'
-    + '</div>';
+
+  var card = document.createElement('div'); card.className = 'preview-card';
+
+  // Head
+  var pvHead = document.createElement('div'); pvHead.className = 'pv-head';
+  var badge = document.createElement('span'); badge.className = 'pv-badge'; badge.textContent = '已识别';
+  var hint = document.createElement('span'); hint.className = 'pv-hint'; hint.textContent = '确认或修改后添加';
+  pvHead.appendChild(badge); pvHead.appendChild(hint);
+
+  // Body
+  var pvBody = document.createElement('div'); pvBody.className = 'pv-body';
+
+  // Title
+  var pfT = document.createElement('div'); pfT.className = 'pf pv-full';
+  var lbT = document.createElement('label'); lbT.textContent = '标题';
+  var inT = document.createElement('input'); inT.type='text'; inT.id='pTitle'; inT.value=data.title||'';
+  pfT.appendChild(lbT); pfT.appendChild(inT);
+
+  // Date
+  var pfD = document.createElement('div'); pfD.className = 'pf';
+  var lbD = document.createElement('label'); lbD.textContent = '日期';
+  var inD = document.createElement('input'); inD.type='date'; inD.id='pDate'; inD.value=data.date||'';
+  pfD.appendChild(lbD); pfD.appendChild(inD);
+
+  // Color
+  var pfC = document.createElement('div'); pfC.className = 'pf';
+  var lbC = document.createElement('label'); lbC.textContent = '颜色分类';
+  var selC = document.createElement('select'); selC.id = 'pColor';
+  COLORS.forEach(function(c) {
+    var opt = document.createElement('option');
+    opt.value = c; opt.textContent = COLOR_LABELS[c]||c;
+    if (c===data.color) opt.selected = true;
+    selC.appendChild(opt);
+  });
+  pfC.appendChild(lbC); pfC.appendChild(selC);
+
+  // Start time
+  var pfS = document.createElement('div'); pfS.className = 'pf';
+  var lbS = document.createElement('label'); lbS.textContent = '开始时间';
+  var inS = document.createElement('input'); inS.type='time'; inS.id='pStart'; inS.value=data.startTime||'09:00';
+  pfS.appendChild(lbS); pfS.appendChild(inS);
+
+  // End time
+  var pfE = document.createElement('div'); pfE.className = 'pf';
+  var lbE = document.createElement('label'); lbE.textContent = '结束时间';
+  var inE = document.createElement('input'); inE.type='time'; inE.id='pEnd'; inE.value=data.endTime||'10:00';
+  pfE.appendChild(lbE); pfE.appendChild(inE);
+
+  // Reminder chips
+  var pfR = document.createElement('div'); pfR.className = 'pf pv-full';
+  var lbR = document.createElement('label'); lbR.textContent = '提前提醒';
+  var chips = document.createElement('div'); chips.className = 'rchips';
+  var inR = document.createElement('input'); inR.type='hidden'; inR.id='pReminder'; inR.value=data.reminder||10;
+  [0,5,10,15,30,60].forEach(function(m) {
+    var chip = document.createElement('button');
+    chip.className = 'rchip' + (m===(data.reminder||10)?' sel':'');
+    chip.textContent = m===0?'不提醒':m+'分钟前';
+    chip.onclick = function() { selChip(chip, m); };
+    chips.appendChild(chip);
+  });
+  pfR.appendChild(lbR); pfR.appendChild(chips); pfR.appendChild(inR);
+
+  // Note
+  var pfN = document.createElement('div'); pfN.className = 'pf pv-full';
+  var lbN = document.createElement('label'); lbN.textContent = '备注';
+  var inN = document.createElement('input'); inN.type='text'; inN.id='pNote'; inN.value=data.note||''; inN.placeholder='可选';
+  pfN.appendChild(lbN); pfN.appendChild(inN);
+
+  pvBody.appendChild(pfT); pvBody.appendChild(pfD); pvBody.appendChild(pfC);
+  pvBody.appendChild(pfS); pvBody.appendChild(pfE); pvBody.appendChild(pfR); pvBody.appendChild(pfN);
+
+  // Footer
+  var pvFoot = document.createElement('div'); pvFoot.className = 'pv-foot';
+  var btnX = document.createElement('button'); btnX.className = 'btn-cancel'; btnX.textContent = '取消';
+  btnX.onclick = closePreview;
+  var btnOK = document.createElement('button'); btnOK.className = 'btn-confirm'; btnOK.textContent = '✓ 确认添加';
+  btnOK.onclick = confirmAdd;
+  pvFoot.appendChild(btnX); pvFoot.appendChild(btnOK);
+
+  card.appendChild(pvHead); card.appendChild(pvBody); card.appendChild(pvFoot);
+  pa.appendChild(card);
 }
 
 function esc(s) {
@@ -846,39 +908,105 @@ function openEdit(id) {
   var existing = document.getElementById('editModal');
   if (existing) existing.remove();
 
-  var colorOpts = COLORS.map(function(c) {
-    return '<option value="' + c + '"' + (c===s.color?' selected':'') + '>' + (COLOR_LABELS[c]||c) + '</option>';
-  }).join('');
-
-  var cpHtml = COLORS.map(function(c) {
-    return '<div class="cp' + (c===s.color?' sel':'') + '" style="background:' + COLOR_HEX[c] + '" title="' + (COLOR_LABELS[c]||c) + '" onclick="pickColor(this,\'' + c + '\')"></div>';
-  }).join('');
-
-  var reminderOpts = [0,5,10,15,30,60].map(function(m) {
-    return '<option value="' + m + '"' + (s.reminder===m?' selected':'') + '>' + (m===0?'不提醒':m+'分钟前') + '</option>';
-  }).join('');
-
+  // Build modal using DOM methods to avoid any string escaping issues
   var modal = document.createElement('div');
   modal.className = 'backdrop';
   modal.id = 'editModal';
-  var inner = document.createElement('div');
-  inner.className = 'modal';
-  inner.innerHTML = '<div class="modal-head"><h3>✎ 编辑日程</h3><button class="modal-x" onclick="document.getElementById(\'editModal\').remove()">✕</button></div>'
-    + '<div class="modal-body">'
-    + '<div class="mf"><label>标题</label><input type="text" id="eTitle" value="' + esc(s.title) + '"></div>'
-    + '<div class="mf-row">'
-    + '<div class="mf"><label>日期</label><input type="date" id="eDate" value="' + s.date + '"></div>'
-    + '<div class="mf"><label>提前提醒</label><select id="eReminder">' + reminderOpts + '</select></div>'
-    + '</div>'
-    + '<div class="mf-row">'
-    + '<div class="mf"><label>开始时间</label><input type="time" id="eStart" value="' + s.startTime + '"></div>'
-    + '<div class="mf"><label>结束时间</label><input type="time" id="eEnd" value="' + s.endTime + '"></div>'
-    + '</div>'
-    + '<div class="mf"><label>颜色标签</label><div class="cpicker">' + cpHtml + '</div><input type="hidden" id="eColor" value="' + s.color + '"></div>'
-    + '<div class="mf"><label>备注</label><input type="text" id="eNote" value="' + esc(s.note||'') + '" placeholder="可选"></div>'
-    + '</div>'
-    + '<div class="modal-foot"><button class="btn-cancel" onclick="document.getElementById(\'editModal\').remove()">取消</button><button class="btn-confirm" onclick="saveEdit(' + s.id + ')">保存</button></div>';
-  modal.appendChild(inner);
+
+  var box = document.createElement('div');
+  box.className = 'modal';
+
+  // Head
+  var head = document.createElement('div');
+  head.className = 'modal-head';
+  var headTitle = document.createElement('h3');
+  headTitle.textContent = '✎ 编辑日程';
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'modal-x';
+  closeBtn.textContent = '✕';
+  closeBtn.onclick = function() { modal.remove(); };
+  head.appendChild(headTitle);
+  head.appendChild(closeBtn);
+
+  // Body
+  var body = document.createElement('div');
+  body.className = 'modal-body';
+
+  // Title field
+  var mfTitle = document.createElement('div'); mfTitle.className = 'mf';
+  var lblTitle = document.createElement('label'); lblTitle.textContent = '标题';
+  var inTitle = document.createElement('input'); inTitle.type = 'text'; inTitle.id = 'eTitle'; inTitle.value = s.title;
+  mfTitle.appendChild(lblTitle); mfTitle.appendChild(inTitle);
+
+  // Row: date + reminder
+  var row1 = document.createElement('div'); row1.className = 'mf-row';
+  var mfDate = document.createElement('div'); mfDate.className = 'mf';
+  var lblDate = document.createElement('label'); lblDate.textContent = '日期';
+  var inDate = document.createElement('input'); inDate.type = 'date'; inDate.id = 'eDate'; inDate.value = s.date;
+  mfDate.appendChild(lblDate); mfDate.appendChild(inDate);
+  var mfRemind = document.createElement('div'); mfRemind.className = 'mf';
+  var lblRemind = document.createElement('label'); lblRemind.textContent = '提前提醒';
+  var selRemind = document.createElement('select'); selRemind.id = 'eReminder';
+  [0,5,10,15,30,60].forEach(function(m) {
+    var opt = document.createElement('option');
+    opt.value = m; opt.textContent = m===0?'不提醒':m+'分钟前';
+    if (s.reminder===m) opt.selected = true;
+    selRemind.appendChild(opt);
+  });
+  mfRemind.appendChild(lblRemind); mfRemind.appendChild(selRemind);
+  row1.appendChild(mfDate); row1.appendChild(mfRemind);
+
+  // Row: start + end time
+  var row2 = document.createElement('div'); row2.className = 'mf-row';
+  var mfStart = document.createElement('div'); mfStart.className = 'mf';
+  var lblStart = document.createElement('label'); lblStart.textContent = '开始时间';
+  var inStart = document.createElement('input'); inStart.type = 'time'; inStart.id = 'eStart'; inStart.value = s.startTime;
+  mfStart.appendChild(lblStart); mfStart.appendChild(inStart);
+  var mfEnd = document.createElement('div'); mfEnd.className = 'mf';
+  var lblEnd = document.createElement('label'); lblEnd.textContent = '结束时间';
+  var inEnd = document.createElement('input'); inEnd.type = 'time'; inEnd.id = 'eEnd'; inEnd.value = s.endTime;
+  mfEnd.appendChild(lblEnd); mfEnd.appendChild(inEnd);
+  row2.appendChild(mfStart); row2.appendChild(mfEnd);
+
+  // Color picker
+  var mfColor = document.createElement('div'); mfColor.className = 'mf';
+  var lblColor = document.createElement('label'); lblColor.textContent = '颜色标签';
+  var picker = document.createElement('div'); picker.className = 'cpicker';
+  var inColor = document.createElement('input'); inColor.type = 'hidden'; inColor.id = 'eColor'; inColor.value = s.color;
+  COLORS.forEach(function(c) {
+    var dot = document.createElement('div');
+    dot.className = 'cp' + (c===s.color?' sel':'');
+    dot.style.background = COLOR_HEX[c];
+    dot.title = COLOR_LABELS[c]||c;
+    dot.onclick = function() { pickColor(dot, c); };
+    picker.appendChild(dot);
+  });
+  mfColor.appendChild(lblColor); mfColor.appendChild(picker); mfColor.appendChild(inColor);
+
+  // Note field
+  var mfNote = document.createElement('div'); mfNote.className = 'mf';
+  var lblNote = document.createElement('label'); lblNote.textContent = '备注';
+  var inNote = document.createElement('input'); inNote.type = 'text'; inNote.id = 'eNote'; inNote.value = s.note||''; inNote.placeholder = '可选';
+  mfNote.appendChild(lblNote); mfNote.appendChild(inNote);
+
+  body.appendChild(mfTitle);
+  body.appendChild(row1);
+  body.appendChild(row2);
+  body.appendChild(mfColor);
+  body.appendChild(mfNote);
+
+  // Footer
+  var foot = document.createElement('div'); foot.className = 'modal-foot';
+  var btnCancel = document.createElement('button'); btnCancel.className = 'btn-cancel'; btnCancel.textContent = '取消';
+  btnCancel.onclick = function() { modal.remove(); };
+  var btnSave = document.createElement('button'); btnSave.className = 'btn-confirm'; btnSave.textContent = '保存';
+  btnSave.onclick = function() { saveEdit(s.id); };
+  foot.appendChild(btnCancel); foot.appendChild(btnSave);
+
+  box.appendChild(head);
+  box.appendChild(body);
+  box.appendChild(foot);
+  modal.appendChild(box);
   modal.addEventListener('click', function(e) { if (e.target===modal) modal.remove(); });
   document.body.appendChild(modal);
 }
