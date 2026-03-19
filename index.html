@@ -42,7 +42,7 @@
   --shadow: 0 2px 12px rgba(26,35,26,0.06);
   --shadow-lg: 0 8px 40px rgba(26,35,26,0.13);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
 
 body {
   font-family: 'DM Sans', 'Noto Sans SC', sans-serif;
@@ -169,887 +169,621 @@ body::before {
 .pf { display:flex; flex-direction:column; gap:4px; }
 .pf.full { grid-column:1/-1; }
 .pf label { font-size:9px; color:var(--ink3); text-transform:uppercase; letter-spacing:1.5px; font-weight:600; font-family:'Outfit',sans-serif; }
-    .pf input, .pf select {
-      background:var(--surface2); border:1.5px solid var(--border);
-      border-radius:var(--radius-sm); color:var(--ink); font-family:inherit;
-      font-size:13px; padding:7px 10px; outline:none; transition:border-color 0.18s;
-    }
-    .pf input:focus, .pf select:focus { border-color:var(--accent); }
-    .pf select option { background:var(--surface); }
-    .reminder-chips { display:flex; gap:4px; flex-wrap:wrap; }
-    .r-chip {
-      padding:4px 10px; border-radius:20px; font-size:11px; cursor:pointer;
-      border:1.5px solid var(--border2); background:var(--surface2); color:var(--ink2);
-      transition:all 0.15s; font-family:inherit;
-    }
-    .r-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
-    .preview-ft {
-      padding:10px 16px; border-top:1px solid var(--border);
-      display:flex; gap:8px; justify-content:flex-end; background:var(--surface2);
-    }
-    .btn-confirm {
-      height:32px; padding:0 20px; border-radius:var(--radius-sm);
-      background:var(--green); border:none; color:#fff; font-size:12px; font-weight:700;
-      font-family:inherit; cursor:pointer; transition:opacity 0.18s;
-    }
-    .btn-confirm:hover { opacity:0.85; }
-    .btn-cancel {
-      height:32px; padding:0 14px; border-radius:var(--radius-sm);
-      background:transparent; border:1.5px solid var(--border2);
-      color:var(--ink2); font-size:12px; font-family:inherit; cursor:pointer; transition:all 0.18s;
-    }
-    .btn-cancel:hover { background:var(--surface3); }
-
-    .content-scroll { flex:1; overflow-y:auto; padding:14px 28px 28px; }
-
-    .date-group-hd {
-      display:flex; align-items:baseline; gap:8px;
-      padding:10px 0 6px; margin-bottom:4px;
-    }
-    .dgh-label { font-size:11px; font-weight:700; color:var(--ink); }
-    .dgh-sub { font-size:10px; color:var(--ink3); font-family:'Outfit',sans-serif; }
-    .dgh-line { flex:1; height:1px; background:var(--border); margin-left:8px; }
-
-    .sched-list { display:flex; flex-direction:column; gap:5px; margin-bottom:8px; }
-    .sched-item {
-      background:var(--surface); border:1.5px solid var(--border);
-      border-radius:var(--radius); padding:12px 14px;
-      display:flex; align-items:center; gap:12px;
-      transition:all 0.18s; cursor:grab;
-      box-shadow:var(--shadow);
-      position:relative; overflow:hidden;
-    }
-    .sched-item:hover { border-color:var(--border2); box-shadow:0 4px 20px rgba(26,23,20,0.1); transform:translateY(-1px); }
-    .sched-item.completed { opacity:0.45; }
-    .sched-item.completed .si-title { text-decoration:line-through; }
-    .sched-item.drag-over { border-color:var(--accent); background:var(--accent-soft); }
-
-    .si-stripe { position:absolute; left:0; top:0; bottom:0; width:5px; border-radius:5px 0 0 5px; }
-    .si-check {
-      width:20px; height:20px; border-radius:50%; border:2px solid var(--border2);
-      cursor:pointer; display:flex; align-items:center; justify-content:center;
-      flex-shrink:0; transition:all 0.18s; background:transparent;
-    }
-    .si-check:hover { border-color:var(--green); background:var(--sage-soft); }
-    .si-check.checked { background:var(--green); border-color:var(--green); }
-    .si-check.checked::after { content:'✓'; font-size:11px; color:#fff; font-weight:700; }
-    .si-body { flex:1; min-width:0; }
-    .si-title { font-size:14px; font-weight:500; color:var(--ink); }
-    .si-meta { font-size:11px; color:var(--ink3); margin-top:2px; display:flex; gap:10px; flex-wrap:wrap; font-family:'Outfit',sans-serif; }
-    .si-meta span { display:flex; align-items:center; gap:3px; }
-    .si-actions { display:flex; gap:4px; opacity:0; transition:opacity 0.15s; }
-    .sched-item:hover .si-actions { opacity:1; }
-    .act-btn {
-      width:26px; height:26px; border-radius:7px; border:none;
-      background:var(--surface3); color:var(--ink2); cursor:pointer;
-      display:flex; align-items:center; justify-content:center; font-size:12px;
-      transition:all 0.15s;
-    }
-    .act-btn:hover { background:var(--bg2); }
-    .act-btn.del:hover { background:rgba(192,57,43,0.12); color:var(--danger); }
-
-    .cal-nav { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-    .cal-nav-btn {
-      width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border);
-      background:var(--surface); color:var(--ink2); cursor:pointer;
-      display:flex; align-items:center; justify-content:center; font-size:13px;
-      transition:all 0.15s; box-shadow:var(--shadow);
-    }
-    .cal-nav-btn:hover { border-color:var(--border2); background:var(--surface3); }
-    .cal-range { font-size:13px; color:var(--ink); font-weight:600; letter-spacing:-0.2px; }
-    .cal-today-btn {
-      padding:5px 12px; border-radius:8px; border:1.5px solid var(--border);
-      background:var(--surface); color:var(--ink2); font-size:11px; font-family:'Outfit',sans-serif;
-      cursor:pointer; transition:all 0.15s; font-weight:500; box-shadow:var(--shadow);
-    }
-    .cal-today-btn:hover { border-color:var(--accent); color:var(--accent); }
-
-    .timetable {
-      background:var(--surface); border:1.5px solid var(--border);
-      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
-    }
-    .tt-head { display:grid; border-bottom:1.5px solid var(--border); }
-    .tt-head-cell {
-      padding:10px 6px; text-align:center; border-right:1px solid var(--border);
-      font-size:11px; color:var(--ink2);
-    }
-    .tt-head-cell:last-child { border-right:none; }
-    .tt-head-cell.today .th-num { background:var(--accent); color:#fff; border-radius:50%; width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; }
-    .th-day { font-size:9px; color:var(--ink3); letter-spacing:1px; text-transform:uppercase; font-family:'Outfit',sans-serif; }
-    .th-num { font-size:16px; font-weight:700; margin-top:2px; display:inline-block; }
-
-    .tt-body { display:grid; }
-    .tt-time-col { border-right:1px solid var(--border); }
-    .tt-time-slot {
-      height:52px; border-bottom:1px solid rgba(228,221,208,0.6);
-      display:flex; align-items:flex-start; justify-content:flex-end;
-      padding:4px 8px 0 0;
-      font-size:10px; color:var(--ink3); font-family:'Outfit',sans-serif;
-    }
-    .tt-day-col { position:relative; border-right:1px solid var(--border); }
-    .tt-day-col:last-child { border-right:none; }
-    .tt-slot { height:52px; border-bottom:1px solid rgba(228,221,208,0.4); }
-    .tt-event {
-      position:absolute; left:2px; right:2px; border-radius:8px;
-      padding:3px 6px; font-size:10px; font-weight:600; overflow:hidden;
-      cursor:pointer; z-index:2; line-height:1.3; transition:all 0.15s;
-    }
-    .tt-event:hover { filter:brightness(0.92); transform:scaleX(0.97); }
-    .tt-event.completed { opacity:0.35; text-decoration:line-through; }
-    .tt-ev-time { font-size:9px; opacity:0.75; font-family:'Outfit',sans-serif; font-weight:400; }
-    .tt-now-line {
-      position:absolute; left:0; right:0; height:2px;
-      background:var(--accent); z-index:3;
-    }
-    .tt-now-dot {
-      position:absolute; left:-4px; top:-4px; width:10px; height:10px;
-      border-radius:50%; background:var(--accent);
-    }
-
-    .day-view-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-    .day-title { font-size:18px; font-weight:700; letter-spacing:-0.3px; }
-    .day-sub { font-size:11px; color:var(--ink3); margin-top:2px; font-family:'Outfit',sans-serif; }
-
-    .si-cat-tag {
-      display:inline-flex; align-items:center; gap:5px;
-      padding:3px 10px 3px 7px; border-radius:20px;
-      font-size:11px; font-weight:600; font-family:'Outfit',sans-serif;
-      letter-spacing:0.2px; flex-shrink:0;
-    }
-    .si-cat-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-
-    .modal-backdrop {
-      position:fixed; inset:0; background:rgba(26,35,26,0.35);
-      backdrop-filter:blur(4px); z-index:100;
-      display:flex; align-items:center; justify-content:center;
-      animation:fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    .modal {
-      background:var(--surface); border:1.5px solid var(--border);
-      border-radius:var(--radius); width:380px; max-width:90vw;
-      box-shadow:var(--shadow-lg); animation:slideUp 0.22s ease;
-    }
-    @keyframes slideUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-    .modal-hd {
-      padding:16px 20px; border-bottom:1px solid var(--border);
-      display:flex; align-items:center; justify-content:space-between;
-    }
-    .modal-hd h3 { font-size:15px; font-weight:700; }
-    .modal-close {
-      width:28px; height:28px; border-radius:8px; border:none;
-      background:var(--surface3); color:var(--ink2); cursor:pointer;
-      display:flex; align-items:center; justify-content:center; font-size:14px;
-      transition:all 0.15s;
-    }
-    .modal-close:hover { background:var(--border); }
-    .modal-bd { padding:16px 20px; display:flex; flex-direction:column; gap:8px; }
-    .cat-row {
-      display:flex; align-items:center; gap:10px;
-      padding:9px 12px; border-radius:var(--radius-sm);
-      background:var(--surface2); border:1.5px solid var(--border);
-      transition:border-color 0.15s;
-    }
-    .cat-row:focus-within { border-color:var(--border2); }
-    .cat-swatch { width:22px; height:22px; border-radius:50%; flex-shrink:0; border:2px solid rgba(0,0,0,0.08); }
-    .cat-input {
-      flex:1; background:transparent; border:none; outline:none;
-      font-family:inherit; font-size:13px; font-weight:500; color:var(--ink);
-    }
-    .modal-ft {
-      padding:12px 20px; border-top:1px solid var(--border);
-      display:flex; justify-content:flex-end; gap:8px;
-    }
-
-    .stripe-accent { background:var(--accent); }
-    .stripe-teal { background:var(--teal); }
-    .stripe-gold { background:var(--gold); }
-    .stripe-plum { background:var(--plum); }
-    .stripe-sage { background:var(--sage); }
-    .stripe-slate { background:var(--slate); }
-
-    .ev-accent { background:var(--accent-soft); color:var(--accent); border:1px solid rgba(194,98,42,0.2); }
-    .ev-teal { background:var(--teal-soft); color:var(--teal); border:1px solid rgba(42,124,124,0.2); }
-    .ev-gold { background:var(--gold-soft); color:var(--gold); border:1px solid rgba(184,150,46,0.2); }
-    .ev-plum { background:var(--plum-soft); color:var(--plum); border:1px solid rgba(124,58,110,0.2); }
-    .ev-sage { background:var(--sage-soft); color:var(--sage); border:1px solid rgba(74,122,84,0.2); }
-    .ev-slate { background:var(--slate-soft); color:var(--slate); border:1px solid rgba(58,90,124,0.2); }
-
-    .toast-wrap { position:fixed; top:18px; right:18px; z-index:9999; display:flex; flex-direction:column; gap:6px; }
-    @media(max-width:768px){ .toast-wrap { top:auto; bottom:96px; left:16px; right:16px; } }
-    .toast {
-      background:var(--surface); border:1.5px solid var(--border);
-      border-radius:var(--radius); padding:12px 16px; min-width:240px;
-      box-shadow:var(--shadow-lg); animation:toastIn 0.25s ease;
-      display:flex; align-items:flex-start; gap:10px;
-    }
-    .toast.reminder { border-left:3px solid var(--accent); }
-    .toast.success { border-left:3px solid var(--sage); }
-    @keyframes toastIn { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
-    .t-icon { font-size:16px; }
-    .t-title { font-size:13px; font-weight:600; color:var(--ink); }
-    .t-msg { font-size:11px; color:var(--ink2); margin-top:2px; font-family:'Outfit',sans-serif; }
-
-    .empty { text-align:center; padding:52px 20px; color:var(--ink3); }
-    .empty-icon { font-size:32px; margin-bottom:12px; opacity:0.5; }
-    .empty p { font-size:13px; }
-
-    .spinner { width:20px; height:20px; border:2px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:spin 0.6s linear infinite; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-
-    ::-webkit-scrollbar { width:4px; height:4px; }
-    ::-webkit-scrollbar-track { background:transparent; }
-    ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
-
-    .color-picker { display:flex; gap:8px; flex-wrap:wrap; }
-    .cp-option {
-      width:28px; height:28px; border-radius:50%; cursor:pointer;
-      border:3px solid transparent; transition:all 0.15s;
-    }
-    .cp-option.sel { border-color:var(--ink); transform:scale(1.15); }
-
-    @media (max-width: 768px) {
-      .app { flex-direction: column; }
-      .sidebar { display: none; }
-      .main { width: 100%; padding-bottom: 80px; }
-      .top-bar { padding: 16px 16px 0; }
-      .top-bar-left h2 { font-size: 18px; }
-      .input-wrap { padding: 12px 16px 0; }
-      .input-ta { font-size: 16px !important; }
-      .preview-wrap { padding: 10px 16px 0; }
-      .modal { width: 92vw; }
-      .preview-bd { grid-template-columns: 1fr; }
-      .pf { grid-column: 1 !important; }
-      .content-scroll { padding: 12px 16px 24px; }
-      .sched-item { padding: 14px 14px 14px 18px; }
-      .si-check { width: 24px; height: 24px; }
-      .si-title { font-size: 15px; }
-      .si-actions { opacity: 1 !important; }
-      .act-btn { width: 32px; height: 32px; font-size: 14px; }
-      .timetable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .bottom-nav {
-        display: flex !important;
-        position: fixed; bottom: 0; left: 0; right: 0;
-        background: var(--surface);
-        border-top: 1.5px solid var(--border);
-        padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-        z-index: 50;
-        box-shadow: 0 -4px 20px rgba(26,35,26,0.08);
-      }
-      .bn-btn {
-        flex: 1; display: flex; flex-direction: column; align-items: center;
-        gap: 3px; padding: 6px 0; border: none; background: transparent;
-        color: var(--ink3); font-size: 10px; font-family: inherit;
-        font-weight: 500; cursor: pointer; transition: color 0.18s;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .bn-btn .bn-icon { font-size: 20px; line-height: 1; }
-      .bn-btn.active { color: var(--accent); }
-      .view-toggle { display: none; }
-      .btn-mic { width: 38px; height: 38px; font-size: 17px; }
-      .btn-parse { height: 38px; padding: 0 20px; font-size: 13px; }
-      .cal-nav { flex-wrap: wrap; gap: 8px; }
-      .cal-range { font-size: 12px; }
-      .pf input, .pf select,
-      #eTitle, #eDate, #eStart, #eEnd, #eNote, #eReminder {
-        font-size: 16px !important;
-        padding: 10px 12px !important;
-      }
-      .cp-option { width: 36px; height: 36px; }
-    }
-
-    .bottom-nav { display: none; }
-    </style>
-    </head>
-    <body>
-
-    <div class="app">
-    <aside class="sidebar">
-      <div class="logo">
-        <div class="logo-mark">
-          <div class="logo-dot">◈</div>
-          <div>
-            <h1>时间管理者</h1>
-            <p>智能日程 · 时间管理者</p>
-          </div>
-        </div>
-      </div>
-      <nav class="nav" style="padding-top:12px">
-        <button class="nav-btn active" id="sn-list" onclick="setView('list')"><span class="icon">≡</span> 日程列表</button>
-        <button class="nav-btn" id="sn-week" onclick="setView('week')"><span class="icon">⊞</span> 周视图</button>
-        <button class="nav-btn" id="sn-day" onclick="setView('day')"><span class="icon">◻</span> 日视图</button>
-      </nav>
-      <div class="sidebar-divider"></div>
-      <div class="sidebar-label">即将到来</div>
-      <div class="upcoming-list" id="upcomingList"></div>
-    </aside>
-
-    <main class="main">
-      <div class="top-bar">
-        <div class="top-bar-left">
-          <h2 id="viewTitle">日程列表</h2>
-          <div class="date-hint" id="dateHint"></div>
-        </div>
-        <div class="view-toggle">
-          <button class="vt-btn active" id="vt-list" onclick="setView('list')">列表</button>
-          <button class="vt-btn" id="vt-week" onclick="setView('week')">周</button>
-          <button class="vt-btn" id="vt-day" onclick="setView('day')">日</button>
-        </div>
-      </div>
-
-      <div class="input-wrap" id="inputWrap">
-        <div class="input-card">
-          <textarea class="input-ta" id="inputText" rows="2"
-            placeholder="用自然语言描述日程…例如：明天下午3点和导师开会1小时 / Team meeting this Friday 10am 2hrs"></textarea>
-          <div class="input-bar">
-            <span class="input-hint" id="inputHint">AI 自动识别时间 · 标题 · 时长</span>
-            <div class="input-btns">
-              <button class="btn-mic" id="micBtn" onclick="toggleMic()" title="语音输入（中文）">🎤</button>
-              <button class="btn-parse" id="parseBtn" onclick="parseSchedule()">✦ 识别日程</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="preview-wrap" id="previewWrap" style="display:none"></div>
-
-      <div class="content-scroll" id="contentScroll">
-        <div id="listView"></div>
-        <div id="weekView" style="display:none"></div>
-        <div id="dayView" style="display:none"></div>
-      </div>
-    </main>
-    </div>
-
-    <nav class="bottom-nav" id="bottomNav">
-      <button class="bn-btn active" id="bn-list" onclick="setView('list')">
-        <span class="bn-icon">≡</span>列表
-      </button>
-      <button class="bn-btn" id="bn-week" onclick="setView('week')">
-        <span class="bn-icon">⊞</span>周
-      </button>
-      <button class="bn-btn" id="bn-day" onclick="setView('day')">
-        <span class="bn-icon">◻</span>日
-      </button>
-      <button class="bn-btn" id="bn-settings" onclick="openCatSettings()">
-        <span class="bn-icon">⚙</span>分类
-      </button>
-    </nav>
-
-    <div class="toast-wrap" id="toastWrap"></div>
-
-    <script>
-    const COLORS = ['accent','teal','gold','plum','sage','slate'];
-    const DEFAULT_LABELS = { accent:'绿·会议', teal:'青·截止', gold:'粉·社交', plum:'芋·学习', sage:'草·运动', slate:'紫·其他' };
-    let COLOR_LABELS = JSON.parse(localStorage.getItem('cat_labels') || JSON.stringify(DEFAULT_LABELS));
-    function saveLabels(){ localStorage.setItem('cat_labels', JSON.stringify(COLOR_LABELS)); }
-    const COLOR_HEX = { accent:'#5a7e50', teal:'#4a7a68', gold:'#f0a8b0', plum:'#c9a0d4', sage:'#6a8c52', slate:'#7a5a9e' };
-    const HOURS = Array.from({length:16},(_,i)=>i+7);
-
-    let schedules = JSON.parse(localStorage.getItem('sch_v2') || '[]');
-    let view = 'list';
-    let weekOff = 0;
-    let dayOff = 0;
-    let dragSrc = null;
-    let rTimers = {};
-    let isRec = false;
-    let recog = null;
-
-    function getToday(off=0) {
-      const d = new Date(); d.setDate(d.getDate()+off);
-      return d.toISOString().split('T')[0];
-    }
-
-    if (!schedules.length) {
-      const t = getToday(), t1 = getToday(1), t2 = getToday(2), t3 = getToday(3);
-      schedules = [
-        {id:1,title:'与导师开会',date:t,startTime:'14:00',endTime:'15:00',color:'teal',reminder:10,completed:false,note:'讨论论文进展'},
-        {id:2,title:'作业提交截止',date:t,startTime:'23:59',endTime:'23:59',color:'accent',reminder:60,completed:false,note:''},
-        {id:3,title:'小组讨论',date:t1,startTime:'10:00',endTime:'11:30',color:'plum',reminder:5,completed:false,note:''},
-        {id:4,title:'CV 投递 — BlackRock',date:t1,startTime:'09:00',endTime:'09:30',color:'sage',reminder:15,completed:false,note:''},
-        {id:5,title:'职业中心预约',date:t2,startTime:'14:30',endTime:'15:30',color:'gold',reminder:10,completed:false,note:'带打印好的CV'},
-        {id:6,title:'期末复习 · 资产定价',date:t3,startTime:'10:00',endTime:'13:00',color:'slate',reminder:0,completed:false,note:''},
-      ];
-      save();
-    }
-
-    function save() { localStorage.setItem('sch_v2', JSON.stringify(schedules)); setupReminders(); }
-    function newId() { return Date.now() + Math.random()*999|0; }
-
-    function setupReminders() {
-      Object.values(rTimers).forEach(clearTimeout); rTimers = {};
-      const now = new Date();
-      schedules.filter(s=>!s.completed&&s.reminder>0).forEach(s=>{
-        const dt = new Date(`${s.date}T${s.startTime}`);
-        const fire = new Date(dt.getTime()-s.reminder*60000);
-        const ms = fire-now;
-        if (ms>0&&ms<604800000) {
-          rTimers[s.id]=setTimeout(()=>{
-            showToast(`🔔 ${s.reminder}分钟后提醒`,`${s.title} · ${s.startTime}`,'reminder');
-            if ('Notification' in window && Notification.permission==='granted') new Notification(`⏰ ${s.reminder}分钟后`,{body:`${s.title} 将于 ${s.startTime} 开始`});
-          },ms);
-        }
-      });
-    }
-    if ('Notification' in window && Notification.permission==='default') Notification.requestPermission();
-
-    function showToast(title,msg,type='success') {
-      const c=document.getElementById('toastWrap');
-      const t=document.createElement('div');
-      t.className=`toast ${type}`;
-      t.innerHTML=`<div class="t-icon">${type==='reminder'?'🔔':'✅'}</div><div><div class="t-title">${title}</div><div class="t-msg">${msg}</div></div>`;
-      c.appendChild(t);
-      setTimeout(()=>{t.style.transition='opacity 0.3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},3500);
-    }
-
-    function parseSchedule() {
-      const text = document.getElementById('inputText').value.trim();
-      if (!text) { showToast('提示','请先输入日程描述','reminder'); return; }
-      const btn=document.getElementById('parseBtn');
-      btn.disabled=true; btn.textContent='识别中…';
-      setTimeout(() => {
-        try { showPreview(localParse(text)); }
-        catch(e) { showToast('提示','无法识别，请手动填写','reminder'); }
-        btn.disabled=false; btn.textContent='✦ 识别日程';
-      }, 300);
-    }
-
-    function localParse(text) {
-      const now = new Date();
-
-      let date = getToday();
-      if (/明天|tomorrow/i.test(text)) date = getToday(1);
-      else if (/后天/i.test(text)) date = getToday(2);
-      else if (/大后天/i.test(text)) date = getToday(3);
-      else if (/下周一|next\s*monday/i.test(text)) date = getToday((8 - now.getDay()) % 7 || 7);
-      else if (/下周二|next\s*tuesday/i.test(text)) date = getToday((9 - now.getDay()) % 7 || 7);
-      else if (/下周三|next\s*wednesday/i.test(text)) date = getToday((10 - now.getDay()) % 7 || 7);
-      else if (/下周四|next\s*thursday/i.test(text)) date = getToday((11 - now.getDay()) % 7 || 7);
-      else if (/下周五|next\s*friday/i.test(text)) date = getToday((12 - now.getDay()) % 7 || 7);
-      else if (/周六|saturday/i.test(text) && !/下周/.test(text)) date = getToday((13 - now.getDay()) % 7 || 7);
-      else if (/周日|sunday/i.test(text) && !/下周/.test(text)) date = getToday((14 - now.getDay()) % 7 || 7);
-      
-      const dateMatch = text.match(/(\d{1,2})[月\/](\d{1,2})[日号]?/);
-      if (dateMatch) {
-        const y = now.getFullYear();
-        const mo = String(dateMatch[1]).padStart(2,'0');
-        const dy = String(dateMatch[2]).padStart(2,'0');
-        date = `${y}-${mo}-${dy}`;
-      }
-
-      let sh = 9, sm = 0, eh = 10, em = 0;
-      const isAfternoon = /下午|午后|pm/i.test(text);
-      const isMorning = /上午|早上|早晨|am/i.test(text);
-      const isEvening = /晚上|傍晚|evening/i.test(text);
-      const isNoon = /中午|noon/i.test(text);
-
-      const timeMatch = text.match(/(\d{1,2})[：:](\d{2})/);
-      const hourMatch = text.match(/(\d{1,2})\s*[点时]/);
-
-      if (timeMatch) {
-        sh = parseInt(timeMatch[1]); sm = parseInt(timeMatch[2]);
-      } else if (hourMatch) {
-        sh = parseInt(hourMatch[1]);
-        if (/半/.test(text)) sm = 30;
-      }
-
-      if ((isAfternoon || isEvening) && sh < 12) sh += 12;
-      if (isNoon && sh < 12) sh = 12;
-      if (isMorning && sh === 12) sh = 0;
-      sh = Math.min(sh, 23);
-
-      let duration = 60;
-      const durMatch = text.match(/(\d+\.?\d*)\s*(?:个)?小时/);
-      const minMatch = text.match(/(\d+)\s*分钟/);
-      const halfMatch = /半小时/.test(text);
-      if (durMatch) duration = Math.round(parseFloat(durMatch[1]) * 60);
-      else if (minMatch) duration = parseInt(minMatch[1]);
-      else if (halfMatch) duration = 30;
-
-      const startMins = sh * 60 + sm;
-      const endMins = startMins + duration;
-      eh = Math.min(Math.floor(endMins / 60), 23);
-      em = endMins % 60;
-
-      const st = `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}`;
-      const et = `${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
-
-      let color = 'teal';
-      if (/会议|meeting|开会|讨论|discussion|call|电话/i.test(text)) color = 'teal';
-      else if (/截止|deadline|提交|due|ddl/i.test(text)) color = 'accent';
-      else if (/学习|复习|作业|读书|上课|考试|study|exam|homework/i.test(text)) color = 'plum';
-      else if (/运动|健身|跑步|gym|workout|exercise|瑜伽/i.test(text)) color = 'sage';
-      else if (/约|聚|吃饭|聚餐|朋友|dinner|lunch|brunch|party/i.test(text)) color = 'gold';
-      else if (/重要|important|urgent|紧急/i.test(text)) color = 'accent';
-
-      let title = text
-        .replace(/明天|后天|大后天|今天|下周[一二三四五六日]|周[一二三四五六日]/g, '')
-        .replace(/\d{1,2}[月\/]\d{1,2}[日号]?/g, '')
-        .replace(/(\d{1,2})[：:]\d{2}/g, '')
-        .replace(/(\d{1,2})\s*[点时]\s*半?/g, '')
-        .replace(/下午|上午|早上|晚上|中午|早晨/g, '')
-        .replace(/\d+\.?\d*\s*(?:个)?小时|\d+\s*分钟|半小时/g, '')
-        .replace(/[，。！？,!?、]/g, '')
-        .trim();
-
-      if (!title || title.length < 2) title = text.slice(0, 20).trim();
-      title = title.slice(0, 30);
-
-      return { title, date, startTime: st, endTime: et, color, reminder: 10, note: '' };
-    }
-
-    function showPreview(d) {
-      document.getElementById('previewWrap').innerHTML=`
-      <div class="preview-card">
-        <div class="preview-hd"><span class="ai-badge">已识别</span><span class="ph">请确认或修改日程信息</span></div>
-        <div class="preview-bd">
-          <div class="pf full"><label>日程标题</label><input type="text" id="pTitle" value="${d.title||''}"></div>
-          <div class="pf"><label>日期</label><input type="date" id="pDate" value="${d.date||getToday()}"></div>
-          <div class="pf"><label>颜色分类</label><select id="pColor">${COLORS.map(c=>`<option value="${c}"${c===d.color?' selected':''}>${COLOR_LABELS[c]}</option>`).join('')}</select></div>
-          <div class="pf"><label>开始时间</label><input type="time" id="pStart" value="${d.startTime||'09:00'}"></div>
-          <div class="pf"><label>结束时间</label><input type="time" id="pEnd" value="${d.endTime||'10:00'}"></div>
-          <div class="pf full"><label>提前提醒</label>
-            <div class="reminder-chips">${[0,5,10,15,30,60].map(m=>`<button class="r-chip${m===(d.reminder??10)?' sel':''}" onclick="selReminder(this,${m})">${m===0?'不提醒':m+'分钟前'}</button>`).join('')}</div>
-            <input type="hidden" id="pReminder" value="${d.reminder??10}">
-          </div>
-          <div class="pf full"><label>备注（可选）</label><input type="text" id="pNote" value="${d.note||''}" placeholder="添加备注…"></div>
-        </div>
-        <div class="preview-ft">
-          <button class="btn-cancel" onclick="cancelPreview()">取消</button>
-          <button class="btn-confirm" onclick="confirmSched()">✓ 确认添加</button>
-        </div>
-      </div>`;
-    }
-
-    function selReminder(el,v){document.querySelectorAll('.r-chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');document.getElementById('pReminder').value=v;}
-    function cancelPreview(){const pw=document.getElementById('previewWrap');pw.style.display='none';pw.innerHTML='';}
-    function confirmSched(){
-      const s={id:newId(),title:document.getElementById('pTitle').value||'新日程',date:document.getElementById('pDate').value,startTime:document.getElementById('pStart').value,endTime:document.getElementById('pEnd').value,color:document.getElementById('pColor').value,reminder:parseInt(document.getElementById('pReminder').value),note:document.getElementById('pNote').value,completed:false};
-      schedules.push(s);
-      schedules.sort((a,b)=>(a.date+a.startTime).localeCompare(b.date+b.startTime));
-      save(); cancelPreview();
-      document.getElementById('inputText').value='';
-      showToast(`已添加：${s.title}`,`${s.date} · ${s.startTime}`,'success');
-      render();
-    }
-
-    function toggleMic(){
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if(!SR){ showToast('提示','语音输入需在 Safari 中开启（设置 → Safari → 语音输入）','reminder'); return; }
-      if(isRec){ recog&&recog.stop(); return; }
-      recog = new SR();
-      recog.lang = 'zh-CN';
-      recog.continuous = false;
-      recog.interimResults = true;
-      recog.onstart = ()=>{ isRec=true; document.getElementById('micBtn').classList.add('recording'); document.getElementById('inputHint').textContent='🔴 正在聆听…'; };
-      recog.onresult = e=>{ const t=Array.from(e.results).map(r=>r[0].transcript).join(''); document.getElementById('inputText').value=t; };
-      recog.onerror = e=>{ isRec=false; document.getElementById('micBtn').classList.remove('recording'); if(e.error==='not-allowed') showToast('权限不足','请在设置中允许麦克风访问','reminder'); };
-      recog.onend = ()=>{ isRec=false; document.getElementById('micBtn').classList.remove('recording'); document.getElementById('inputHint').textContent='AI 自动识别时间 · 标题 · 时长'; };
-      try{ recog.start(); } catch(e){ showToast('提示','语音启动失败，请重试','reminder'); }
-    }
-    document.getElementById('inputText').addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')parseSchedule();});
-
-    function toggleDone(id){const s=schedules.find(x=>x.id===id);if(s){s.completed=!s.completed;save();render();}}
-    function delSched(id){schedules=schedules.filter(x=>x.id!==id);save();render();}
-
-    function setView(v){
-      view=v;
-      ['list','week','day'].forEach(k=>{
-        document.getElementById(`${k}View`).style.display=k===v?'block':'none';
-        const sn=document.getElementById(`sn-${k}`); if(sn) sn.classList.toggle('active',k===v);
-        const vt=document.getElementById(`vt-${k}`); if(vt) vt.classList.toggle('active',k===v);
-        const bn=document.getElementById(`bn-${k}`); if(bn) bn.classList.toggle('active',k===v);
-      });
-      const bnS=document.getElementById('bn-settings'); if(bnS) bnS.classList.remove('active');
-      const titles={list:'日程列表',week:'周视图',day:'日视图'};
-      document.getElementById('viewTitle').textContent=titles[v];
-      document.getElementById('inputWrap').style.display=v==='list'?'block':'none';
-      document.getElementById('previewWrap').style.display='none';
-      const cs=document.getElementById('contentScroll'); if(cs) cs.scrollTop=0;
-      render();
-    }
-
-    function openEdit(id){
-      const s = schedules.find(x=>x.id===id);
-      if(!s) return;
-      const existing = document.getElementById('editModal');
-      if(existing) existing.remove();
-
-      const colorPicker = COLORS.map(c=>`
-        <div class="cp-option${s.color===c?' sel':''}" 
-          style="background:${COLOR_HEX[c]}"
-          title="${COLOR_LABELS[c]||c}"
-          onclick="selectEditColor(this,'${c}')"></div>`).join('');
-
-      const modal = document.createElement('div');
-      modal.className = 'modal-backdrop'; modal.id = 'editModal';
-      modal.innerHTML = `<div class="modal">
-        <div class="modal-hd">
-          <h3>✎ 编辑日程</h3>
-          <button class="modal-close" onclick="document.getElementById('editModal').remove()">✕</button>
-        </div>
-        <div class="modal-bd" style="gap:10px">
-          <div class="pf full" style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">日程标题</label>
-            <input class="cat-input" id="eTitle" value="\${s.title}" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;transition:border-color 0.18s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">日期</label>
-              <input type="date" id="eDate" value="\${s.date}" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;font-family:inherit;transition:border-color 0.18s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">提前提醒</label>
-              <select id="eReminder" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;font-family:inherit">
-                \${[0,5,10,15,30,60].map(m=>\`<option value="\${m}"\${s.reminder===m?' selected':''}>\${m===0?'不提醒':m+'分钟前'}</option>\`).join('')}
-              </select>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">开始时间</label>
-              <input type="time" id="eStart" value="\${s.startTime}" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;font-family:inherit">
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px">
-              <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">结束时间</label>
-              <input type="time" id="eEnd" value="\${s.endTime}" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;font-family:inherit">
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">颜色标签</label>
-            <div class="color-picker">\${colorPicker}</div>
-            <input type="hidden" id="eColor" value="\${s.color}">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:9px;color:var(--ink3);text-transform:uppercase;letter-spacing:1.5px;font-weight:600;font-family:'Outfit',sans-serif">备注</label>
-            <input class="cat-input" id="eNote" value="\${s.note||''}" placeholder="添加备注…" style="background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;font-size:13px;color:var(--ink);outline:none;transition:border-color 0.18s" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
-          </div>
-        </div>
-        <div class="modal-ft">
-          <button class="btn-cancel" onclick="document.getElementById('editModal').remove()">取消</button>
-          <button class="btn-confirm" onclick="saveEdit(\${s.id})">保存</button>
-        </div>
-      </div>`;
-      modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
-      document.body.appendChild(modal);
-    }
-
-    function selectEditColor(el, color){
-      document.querySelectorAll('.cp-option').forEach(c=>c.classList.remove('sel'));
-      el.classList.add('sel');
-      document.getElementById('eColor').value = color;
-    }
-
-    function saveEdit(id){
-      const s = schedules.find(x=>x.id===id);
-      if(!s) return;
-      s.title = document.getElementById('eTitle').value.trim() || s.title;
-      s.date = document.getElementById('eDate').value;
-      s.startTime = document.getElementById('eStart').value;
-      s.endTime = document.getElementById('eEnd').value;
-      s.color = document.getElementById('eColor').value;
-      s.reminder = parseInt(document.getElementById('eReminder').value);
-      s.note = document.getElementById('eNote').value.trim();
-      save(); 
-      document.getElementById('editModal').remove();
-      showToast('已保存', s.title, 'success');
-      render();
-    }
-
-    function openCatSettings(){
-      const existing = document.getElementById('catModal');
-      if(existing) existing.remove();
-      const rows = COLORS.map(c=>`
-        <div class="cat-row">
-          <div class="cat-swatch" style="background:${COLOR_HEX[c]}"></div>
-          <input class="cat-input" data-color="${c}" value="${COLOR_LABELS[c]||c}" placeholder="分类名称" maxlength="12">
-        </div>`).join('');
-      const modal = document.createElement('div');
-      modal.className = 'modal-backdrop'; modal.id = 'catModal';
-      modal.innerHTML = `<div class="modal">
-        <div class="modal-hd"><h3>✦ 自定义分类</h3><button class="modal-close" onclick="document.getElementById('catModal').remove()">✕</button></div>
-        <div class="modal-bd">${rows}</div>
-        <div class="modal-ft">
-          <button class="btn-cancel" onclick="document.getElementById('catModal').remove()">取消</button>
-          <button class="btn-confirm" onclick="saveCatSettings()">保存</button>
-        </div>
-      </div>`;
-      modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
-      document.body.appendChild(modal);
-    }
-
-    function saveCatSettings(){
-      document.querySelectorAll('.cat-input').forEach(inp=>{
-        const c = inp.dataset.color;
-        if(c && inp.value.trim()) COLOR_LABELS[c] = inp.value.trim();
-      });
-      saveLabels();
-      document.getElementById('catModal').remove();
-      showToast('分类已更新','标签名称已保存','success');
-      render();
-    }
-
-    function render(){renderUpcoming();if(view==='list')renderList();else if(view==='week')renderWeek();else renderDay();}
-
-    function renderUpcoming(){
-      const today=getToday();
-      const items=schedules.filter(s=>!s.completed&&s.date>=today).sort((a,b)=>(a.date+a.startTime).localeCompare(b.date+b.startTime)).slice(0,7);
-      const el=document.getElementById('upcomingList');
-      if(!items.length){el.innerHTML=`<div style="padding:4px 20px;font-size:11px;color:var(--ink3)">暂无即将日程</div>`;return;}
-      el.innerHTML=items.map(s=>{
-        const hex=COLOR_HEX[s.color]||'#888';
-        const isT=s.date===today;
-        return `<div class="up-item" onclick="setView('list')" style="--bc:${hex}">
-          <style>.up-item[style*="${hex}"]::before{background:${hex}}</style>
-          <div class="up-date">${isT?'今天':s.date} · ${s.startTime}</div>
-          <div class="up-title">${s.title}</div>
-        </div>`;
-      }).join('');
-    }
-
-    function renderList(){
-      const el=document.getElementById('listView');
-      const now=new Date(); const today=getToday();
-      const weekArr=['周日','周一','周二','周三','周四','周五','周六'];
-      const sorted=[...schedules].sort((a,b)=>{if(a.completed!==b.completed)return a.completed?1:-1;return(a.date+a.startTime).localeCompare(b.date+b.startTime);});
-      if(!sorted.length){el.innerHTML=`<div class="empty"><div class="empty-icon">◈</div><p>还没有日程<br>在上方输入一段话，让 AI 识别</p></div>`;return;}
-      let html='',lastDate='';
-      sorted.forEach((s,i)=>{
-        const origIdx=schedules.indexOf(s);
-        if(s.date!==lastDate){
-          const d=new Date(s.date+'T12:00:00');
-          const isT=s.date===today; const isYes=s.date===getToday(-1); const isTom=s.date===getToday(1);
-          const lbl=isT?'今天':isTom?'明天':isYes?'昨天':`${d.getMonth()+1}月${d.getDate()}日`;
-          html+=`<div class="date-group-hd"><span class="dgh-label">${lbl}</span><span class="dgh-sub">${weekArr[d.getDay()]}</span><div class="dgh-line"></div></div><div class="sched-list">`;
-          if(lastDate) html='</div>'+html; lastDate=s.date;
-        }
-        html+=`<div class="sched-item${s.completed?' completed':''}" draggable="true"
-          ondragstart="dragSrc=${origIdx}" ondragover="event.preventDefault();event.currentTarget.classList.add('drag-over')"
-          ondragleave="event.currentTarget.classList.remove('drag-over')"
-          ondrop="event.preventDefault();event.currentTarget.classList.remove('drag-over');doDrop(${origIdx})">
-          <div class="si-stripe stripe-${s.color}"></div>
-          <div class="si-check${s.completed?' checked':''}" onclick="toggleDone(${s.id})"></div>
-          <div class="si-body">
-            <div class="si-title" onclick="openEdit(${s.id})" style="cursor:pointer">${s.title}</div>
-            <div class="si-meta">
-              <span>🕐 ${s.startTime}${s.endTime&&s.endTime!==s.startTime?' – '+s.endTime:''}</span>
-              ${s.note?`<span>📝 ${s.note}</span>`:''}
-              ${s.reminder>0?`<span style="color:var(--accent)">🔔 ${s.reminder}min</span>`:''}
-            </div>
-          </div>
-          <div class="si-actions">
-            <button class="act-btn" onclick="openEdit(${s.id})" title="编辑">✎</button>
-            <button class="act-btn del" onclick="delSched(${s.id})" title="删除">✕</button>
-          </div>
-        </div>`;
-      });
-      if(lastDate) html+='</div>';
-      el.innerHTML=html;
-    }
-    function doDrop(toIdx){if(dragSrc===null||dragSrc===toIdx)return;const m=schedules.splice(dragSrc,1)[0];schedules.splice(toIdx,0,m);save();render();dragSrc=null;}
-
-    function renderWeek(){
-      const el=document.getElementById('weekView');
-      const now=new Date(); const base=new Date(now);
-      base.setDate(now.getDate()-now.getDay()+weekOff*7); base.setHours(0,0,0,0);
-      const days=Array.from({length:7},(_,i)=>{const d=new Date(base);d.setDate(base.getDate()+i);return d;});
-      const today=getToday();
-      const wNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      const s1=`${days[0].getMonth()+1}月${days[0].getDate()}日`, s2=`${days[6].getMonth()+1}月${days[6].getDate()}日`;
-
-      document.getElementById('dateHint').textContent=`${s1} — ${s2}`;
-
-      const colW=`60px repeat(7,1fr)`;
-      let html=`<div class="cal-nav">
-        <button class="cal-nav-btn" onclick="weekOff--;renderWeek()">‹</button>
-        <span class="cal-range">${s1} — ${s2}</span>
-        <button class="cal-nav-btn" onclick="weekOff++;renderWeek()">›</button>
-        <button class="cal-today-btn" onclick="weekOff=0;renderWeek()">本周</button>
-      </div>
-      <div class="timetable">
-        <div class="tt-head" style="grid-template-columns:${colW}">
-          <div class="tt-head-cell" style="color:var(--ink3);font-size:10px;font-family:'Outfit',sans-serif">TIME</div>
-          ${days.map(d=>{const ds=d.toISOString().split('T')[0];const iT=ds===today;return`<div class="tt-head-cell${iT?' today':''}"><div class="th-day">${wNames[d.getDay()]}</div><div class="th-num">${d.getDate()}</div></div>`;}).join('')}
-        </div>
-        <div class="tt-body" style="grid-template-columns:${colW}">
-          <div class="tt-time-col">${HOURS.map(h=>`<div class="tt-time-slot">${h}:00</div>`).join('')}</div>
-          ${days.map(d=>{
-            const ds=d.toISOString().split('T')[0];
-            const dayEv=schedules.filter(s=>s.date===ds);
-            const nowMs=now.getHours()*60+now.getMinutes();
-            const nowTop=(nowMs-7*60)/60*52;
-            const nowLine=ds===today&&nowTop>0&&nowTop<HOURS.length*52?`<div class="tt-now-line" style="top:${nowTop}px"><div class="tt-now-dot"></div></div>`:'';
-            return`<div class="tt-day-col">
-              ${HOURS.map(()=>`<div class="tt-slot"></div>`).join('')}
-              ${nowLine}
-              ${dayEv.map(s=>{const[sh,sm]=s.startTime.split(':').map(Number);const[eh,em]=s.endTime.split(':').map(Number);const top=(sh*60+sm-7*60)/60*52;const h=Math.max((eh*60+em-(sh*60+sm))/60*52,18);if(top<0||top>HOURS.length*52)return'';return`<div class="tt-event ev-${s.color}${s.completed?' completed':''}" style="top:${top}px;height:${h}px" onclick="toggleDone(${s.id})" title="${s.title}"><div class="tt-ev-time">${s.startTime}</div><div>${s.title}</div></div>`;}).join('')}
-            </div>`;
-          }).join('')}
-        </div>
-      </div>`;
-      el.innerHTML=html;
-    }
-
-    function renderDay(){
-      const el=document.getElementById('dayView');
-      const d=new Date(); d.setDate(d.getDate()+dayOff);
-      const ds=d.toISOString().split('T')[0];
-      const wNames=['周日','周一','周二','周三','周四','周五','周六'];
-      const isToday=dayOff===0;
-      const dayEv=schedules.filter(s=>s.date===ds).sort((a,b)=>a.startTime.localeCompare(b.startTime));
-      const now=new Date(); const nowMs=now.getHours()*60+now.getMinutes(); const nowTop=(nowMs-7*60)/60*52;
-
-      document.getElementById('dateHint').textContent=`${d.getMonth()+1}月${d.getDate()}日 · ${wNames[d.getDay()]}`;
-
-      let html=`<div class="day-view-hd">
-        <div>
-          <div class="day-title">${isToday?'今天':d.getMonth()+1+'月'+d.getDate()+'日'}</div>
-          <div class="day-sub">${wNames[d.getDay()]} · ${dayEv.length} 个日程</div>
-        </div>
-        <div class="cal-nav" style="margin:0">
-          <button class="cal-nav-btn" onclick="dayOff--;renderDay()">‹</button>
-          <button class="cal-nav-btn" onclick="dayOff++;renderDay()">›</button>
-          <button class="cal-today-btn" onclick="dayOff=0;renderDay()">今天</button>
-        </div>
-      </div>
-      <div class="timetable">
-        <div class="tt-body" style="grid-template-columns:60px 1fr">
-          <div class="tt-time-col">${HOURS.map(h=>`<div class="tt-time-slot">${h}:00</div>`).join('')}</div>
-          <div class="tt-day-col" style="border-right:none">
-            ${HOURS.map(()=>`<div class="tt-slot"></div>`).join('')}
-            ${isToday&&nowTop>0&&nowTop<HOURS.length*52?`<div class="tt-now-line" style="top:${nowTop}px"><div class="tt-now-dot"></div></div>`:''}
-            ${dayEv.map(s=>{
-              const[sh,sm]=s.startTime.split(':').map(Number);const[eh,em]=s.endTime.split(':').map(Number);
-              const top=(sh*60+sm-7*60)/60*52; const h=Math.max((eh*60+em-(sh*60+sm))/60*52,20);
-              if(top<0||top>HOURS.length*52)return'';
-              return`<div class="tt-event ev-${s.color}${s.completed?' completed':''}" style="top:${top}px;height:${h}px;left:4px;right:4px" onclick="toggleDone(${s.id})">
-                <div class="tt-ev-time">${s.startTime}${s.endTime&&s.endTime!==s.startTime?' – '+s.endTime:''}</div>
-                <div style="font-size:12px;margin-top:2px">${s.title}</div>
-                ${s.note?`<div style="font-size:10px;opacity:0.65;margin-top:2px">${s.note}</div>`:''}
-              </div>`;
-            }).join('')}
-          </div>
-        </div>
-      </div>`;
-
-      if(dayEv.length===0) html+=`<div class="empty" style="padding:32px"><div class="empty-icon">◇</div><p>这天没有日程</p></div>`;
-      el.innerHTML=html;
-    }
-
-    render();
-    </script>
-
-   <script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for(let registration of registrations) {
-      registration.unregister();
-    }
-  });
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js?v=' + new Date().getTime()).catch(() => {});
-  });
+.pf input, .pf select {
+  background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); color:var(--ink); font-family:inherit;
+  font-size:13px; padding:7px 10px; outline:none; transition:border-color 0.18s;
 }
-</script>
-</body>
-</html>
+.pf input:focus, .pf select:focus { border-color:var(--accent); }
+.pf select option { background:var(--surface); }
+.reminder-chips { display:flex; gap:4px; flex-wrap:wrap; }
+.r-chip {
+  padding:4px 10px; border-radius:20px; font-size:11px; cursor:pointer;
+  border:1.5px solid var(--border2); background:var(--surface2); color:var(--ink2);
+  transition:all 0.15s; font-family:inherit;
+}
+.r-chip.sel { background:var(--accent); border-color:var(--accent); color:#fff; }
+.preview-ft {
+  padding:10px 16px; border-top:1px solid var(--border);
+  display:flex; gap:8px; justify-content:flex-end; background:var(--surface2);
+}
+.btn-confirm {
+  height:32px; padding:0 20px; border-radius:var(--radius-sm);
+  background:var(--green); border:none; color:#fff; font-size:12px; font-weight:700;
+  font-family:inherit; cursor:pointer; transition:opacity 0.18s;
+}
+.btn-confirm:hover { opacity:0.85; }
+.btn-cancel {
+  height:32px; padding:0 14px; border-radius:var(--radius-sm);
+  background:transparent; border:1.5px solid var(--border2);
+  color:var(--ink2); font-size:12px; font-family:inherit; cursor:pointer; transition:all 0.18s;
+}
+.btn-cancel:hover { background:var(--surface3); }
+
+.content-scroll { flex:1; overflow-y:auto; padding:14px 28px 28px; }
+
+.date-group-hd {
+  display:flex; align-items:baseline; gap:8px;
+  padding:10px 0 6px; margin-bottom:4px;
+}
+.dgh-label { font-size:11px; font-weight:700; color:var(--ink); }
+.dgh-sub { font-size:10px; color:var(--ink3); font-family:'Outfit',sans-serif; }
+.dgh-line { flex:1; height:1px; background:var(--border); margin-left:8px; }
+
+.sched-list { display:flex; flex-direction:column; gap:5px; margin-bottom:8px; }
+.sched-item {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); padding:12px 14px;
+  display:flex; align-items:center; gap:12px;
+  transition:all 0.18s;
+  box-shadow:var(--shadow);
+  position:relative; overflow:hidden;
+}
+.sched-item:hover { border-color:var(--border2); box-shadow:0 4px 20px rgba(26,23,20,0.1); transform:translateY(-1px); }
+.sched-item.completed { opacity:0.45; }
+.sched-item.completed .si-title { text-decoration:line-through; }
+
+.si-stripe { position:absolute; left:0; top:0; bottom:0; width:5px; border-radius:5px 0 0 5px; }
+.si-check {
+  width:20px; height:20px; border-radius:50%; border:2px solid var(--border2);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:all 0.18s; background:transparent;
+}
+.si-check:hover { border-color:var(--green); background:var(--sage-soft); }
+.si-check.checked { background:var(--green); border-color:var(--green); }
+.si-check.checked::after { content:'✓'; font-size:11px; color:#fff; font-weight:700; }
+.si-body { flex:1; min-width:0; cursor:pointer; }
+.si-title { font-size:14px; font-weight:500; color:var(--ink); }
+.si-meta { font-size:11px; color:var(--ink3); margin-top:2px; display:flex; gap:10px; flex-wrap:wrap; font-family:'Outfit',sans-serif; }
+.si-meta span { display:flex; align-items:center; gap:3px; }
+.si-actions { display:flex; gap:4px; opacity:0; transition:opacity 0.15s; }
+.sched-item:hover .si-actions { opacity:1; }
+.act-btn {
+  width:26px; height:26px; border-radius:7px; border:none;
+  background:var(--surface3); color:var(--ink2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+  transition:all 0.15s;
+}
+.act-btn:hover { background:var(--bg2); }
+.act-btn.del:hover { background:rgba(192,57,43,0.12); color:var(--danger); }
+
+.cal-nav { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.cal-nav-btn {
+  width:30px; height:30px; border-radius:8px; border:1.5px solid var(--border);
+  background:var(--surface); color:var(--ink2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:13px;
+  transition:all 0.15s; box-shadow:var(--shadow);
+}
+.cal-nav-btn:hover { border-color:var(--border2); background:var(--surface3); }
+.cal-range { font-size:13px; color:var(--ink); font-weight:600; letter-spacing:-0.2px; }
+.cal-today-btn {
+  padding:5px 12px; border-radius:8px; border:1.5px solid var(--border);
+  background:var(--surface); color:var(--ink2); font-size:11px; font-family:'Outfit',sans-serif;
+  cursor:pointer; transition:all 0.15s; font-weight:500; box-shadow:var(--shadow);
+}
+.cal-today-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+.timetable {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+}
+.tt-head { display:grid; border-bottom:1.5px solid var(--border); }
+.tt-head-cell {
+  padding:10px 6px; text-align:center; border-right:1px solid var(--border);
+  font-size:11px; color:var(--ink2);
+}
+.tt-head-cell:last-child { border-right:none; }
+.tt-head-cell.today .th-num { background:var(--accent); color:#fff; border-radius:50%; width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; }
+.th-day { font-size:9px; color:var(--ink3); letter-spacing:1px; text-transform:uppercase; font-family:'Outfit',sans-serif; }
+.th-num { font-size:16px; font-weight:700; margin-top:2px; display:inline-block; }
+
+.tt-body { display:grid; }
+.tt-time-col { border-right:1px solid var(--border); }
+.tt-time-slot {
+  height:52px; border-bottom:1px solid rgba(228,221,208,0.6);
+  display:flex; align-items:flex-start; justify-content:flex-end;
+  padding:4px 8px 0 0;
+  font-size:10px; color:var(--ink3); font-family:'Outfit',sans-serif;
+}
+.tt-day-col { position:relative; border-right:1px solid var(--border); }
+.tt-day-col:last-child { border-right:none; }
+.tt-slot { height:52px; border-bottom:1px solid rgba(228,221,208,0.4); }
+.tt-event {
+  position:absolute; left:2px; right:2px; border-radius:8px;
+  padding:3px 6px; font-size:10px; font-weight:600; overflow:hidden;
+  cursor:pointer; z-index:2; line-height:1.3; transition:all 0.15s;
+}
+.tt-event:hover { filter:brightness(0.92); transform:scaleX(0.97); }
+.tt-event.completed { opacity:0.35; text-decoration:line-through; }
+.tt-ev-time { font-size:9px; opacity:0.75; font-family:'Outfit',sans-serif; font-weight:400; }
+.tt-now-line {
+  position:absolute; left:0; right:0; height:2px;
+  background:var(--accent); z-index:3;
+}
+.tt-now-dot {
+  position:absolute; left:-4px; top:-4px; width:10px; height:10px;
+  border-radius:50%; background:var(--accent);
+}
+
+.day-view-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.day-title { font-size:18px; font-weight:700; letter-spacing:-0.3px; }
+.day-sub { font-size:11px; color:var(--ink3); margin-top:2px; font-family:'Outfit',sans-serif; }
+
+.modal-backdrop {
+  position:fixed; inset:0; background:rgba(26,35,26,0.35);
+  backdrop-filter:blur(4px); z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  animation:fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); width:380px; max-width:90vw;
+  box-shadow:var(--shadow-lg); animation:slideUp 0.22s ease;
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.modal-hd {
+  padding:16px 20px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.modal-hd h3 { font-size:15px; font-weight:700; }
+.modal-close {
+  width:28px; height:28px; border-radius:8px; border:none;
+  background:var(--surface3); color:var(--ink2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+  transition:all 0.15s;
+}
+.modal-close:hover { background:var(--border); }
+.modal-bd { padding:16px 20px; display:flex; flex-direction:column; gap:8px; }
+.cat-row {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:var(--radius-sm);
+  background:var(--surface2); border:1.5px solid var(--border);
+  transition:border-color 0.15s;
+}
+.cat-row:focus-within { border-color:var(--border2); }
+.cat-swatch { width:22px; height:22px; border-radius:50%; flex-shrink:0; border:2px solid rgba(0,0,0,0.08); }
+.cat-input {
+  flex:1; background:transparent; border:none; outline:none;
+  font-family:inherit; font-size:13px; font-weight:500; color:var(--ink);
+}
+.modal-ft {
+  padding:12px 20px; border-top:1px solid var(--border);
+  display:flex; justify-content:flex-end; gap:8px;
+}
+
+.stripe-accent { background:var(--accent); }
+.stripe-teal { background:var(--teal); }
+.stripe-gold { background:var(--gold); }
+.stripe-plum { background:var(--plum); }
+.stripe-sage { background:var(--sage); }
+.stripe-slate { background:var(--slate); }
+
+.ev-accent { background:var(--accent-soft); color:var(--accent); border:1px solid rgba(194,98,42,0.2); }
+.ev-teal { background:var(--teal-soft); color:var(--teal); border:1px solid rgba(42,124,124,0.2); }
+.ev-gold { background:var(--gold-soft); color:var(--gold); border:1px solid rgba(184,150,46,0.2); }
+.ev-plum { background:var(--plum-soft); color:var(--plum); border:1px solid rgba(124,58,110,0.2); }
+.ev-sage { background:var(--sage-soft); color:var(--sage); border:1px solid rgba(74,122,84,0.2); }
+.ev-slate { background:var(--slate-soft); color:var(--slate); border:1px solid rgba(58,90,124,0.2); }
+
+.toast-wrap { position:fixed; top:18px; right:18px; z-index:9999; display:flex; flex-direction:column; gap:6px; pointer-events:none; }
+@media(max-width:768px){ .toast-wrap { top:auto; bottom:96px; left:16px; right:16px; } }
+.toast {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius); padding:12px 16px; min-width:240px;
+  box-shadow:var(--shadow-lg); animation:toastIn 0.25s ease;
+  display:flex; align-items:flex-start; gap:10px;
+}
+.toast.reminder { border-left:3px solid var(--accent); }
+.toast.success { border-left:3px solid var(--sage); }
+@keyframes toastIn { from{opacity:0;transform:translateX(16px)} to{opacity:1;transform:translateX(0)} }
+.t-icon { font-size:16px; }
+.t-title { font-size:13px; font-weight:600; color:var(--ink); }
+.t-msg { font-size:11px; color:var(--ink2); margin-top:2px; font-family:'Outfit',sans-serif; }
+
+.empty { text-align:center; padding:52px 20px; color:var(--ink3); }
+.empty-icon { font-size:32px; margin-bottom:12px; opacity:0.5; }
+.empty p { font-size:13px; }
+
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+.color-picker { display:flex; gap:8px; flex-wrap:wrap; }
+.cp-option {
+  width:28px; height:28px; border-radius:50%; cursor:pointer;
+  border:3px solid transparent; transition:all 0.15s;
+}
+.cp-option.sel { border-color:var(--ink); transform:scale(1.15); }
+
+@media (max-width: 768px) {
+  .app { flex-direction: column; }
+  .sidebar { display: none; }
+  .main { width: 100%; padding-bottom: 80px; }
+  .top-bar { padding: 16px 16px 0; }
+  .top-bar-left h2 { font-size: 18px; }
+  .input-wrap { padding: 12px 16px 0; }
+  .input-ta { font-size: 16px !important; }
+  .preview-wrap { padding: 10px 16px 0; }
+  .modal { width: 92vw; }
+  .preview-bd { grid-template-columns: 1fr; }
+  .pf { grid-column: 1 !important; }
+  .content-scroll { padding: 12px 16px 24px; }
+  .sched-item { padding: 14px 14px 14px 18px; }
+  .si-check { width: 24px; height: 24px; }
+  .si-title { font-size: 15px; }
+  .si-actions { opacity: 1 !important; }
+  .act-btn { width: 32px; height: 32px; font-size: 14px; }
+  .timetable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .bottom-nav {
+    display: flex !important;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 1.5px solid var(--border);
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+    z-index: 50;
+    box-shadow: 0 -4px 20px rgba(26,35,26,0.08);
+  }
+  .bn-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 6px 0; border: none; background: transparent;
+    color: var(--ink3); font-size: 10px; font-family: inherit;
+    font-weight: 500; cursor: pointer; transition: color 0.18s;
+  }
+  .bn-btn .bn-icon { font-size: 20px; line-height: 1; }
+  .bn-btn.active { color: var(--accent); }
+  .view-toggle { display: none; }
+  .btn-mic { width: 38px; height: 38px; font-size: 17px; }
+  .btn-parse { height: 38px; padding: 0 20px; font-size: 13px; }
+  .cal-nav { flex-wrap: wrap; gap: 8px; }
+  .cal-range { font-size: 12px; }
+  .pf input, .pf select,
+  #eTitle, #eDate, #eStart, #eEnd, #eNote, #eReminder {
+    font-size: 16px !important;
+    padding: 10px 12px !important;
+  }
+  .cp-option { width: 36px; height: 36px; }
+}
+
+.bottom-nav { display: none; }
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-dot">◈</div>
+      <div>
+        <h1>时间管理者</h1>
+        <p>智能日程 · 时间管理者</p>
+      </div>
+    </div>
+  </div>
+  <nav class="nav" style="padding-top:12px">
+    <button class="nav-btn active" id="sn-list" onclick="setView('list')"><span class="icon">≡</span> 日程列表</button>
+    <button class="nav-btn" id="sn-week" onclick="setView('week')"><span class="icon">⊞</span> 周视图</button>
+    <button class="nav-btn" id="sn-day" onclick="setView('day')"><span class="icon">◻</span> 日视图</button>
+  </nav>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">即将到来</div>
+  <div class="upcoming-list" id="upcomingList"></div>
+</aside>
+
+<main class="main">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h2 id="viewTitle">日程列表</h2>
+      <div class="date-hint" id="dateHint"></div>
+    </div>
+    <div class="view-toggle">
+      <button class="vt-btn active" id="vt-list" onclick="setView('list')">列表</button>
+      <button class="vt-btn" id="vt-week" onclick="setView('week')">周</button>
+      <button class="vt-btn" id="vt-day" onclick="setView('day')">日</button>
+    </div>
+  </div>
+
+  <div class="input-wrap" id="inputWrap">
+    <div class="input-card">
+      <textarea class="input-ta" id="inputText" rows="2"
+        placeholder="用自然语言描述日程…例如：明天下午3点和导师开会1小时"></textarea>
+      <div class="input-bar">
+        <span class="input-hint" id="inputHint">AI 自动识别时间 · 标题 · 时长</span>
+        <div class="input-btns">
+          <button class="btn-mic" id="micBtn" onclick="toggleMic()">🎤</button>
+          <button class="btn-parse" id="parseBtn" onclick="parseSchedule()">✦ 识别日程</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap" id="previewWrap" style="display:none"></div>
+
+  <div class="content-scroll" id="contentScroll">
+    <div id="listView"></div>
+    <div id="weekView" style="display:none"></div>
+    <div id="dayView" style="display:none"></div>
+  </div>
+</main>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bn-btn active" id="bn-list" onclick="setView('list')">
+    <span class="bn-icon">≡</span>列表
+  </button>
+  <button class="bn-btn" id="bn-week" onclick="setView('week')">
+    <span class="bn-icon">⊞</span>周
+  </button>
+  <button class="bn-btn" id="bn-day" onclick="setView('day')">
+    <span class="bn-icon">◻</span>日
+  </button>
+  <button class="bn-btn" id="bn-settings" onclick="openCatSettings()">
+    <span class="bn-icon">⚙</span>分类
+  </button>
+</nav>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+const COLORS = ['accent','teal','gold','plum','sage','slate'];
+const DEFAULT_LABELS = { accent:'绿·会议', teal:'青·截止', gold:'粉·社交', plum:'芋·学习', sage:'草·运动', slate:'紫·其他' };
+let COLOR_LABELS = JSON.parse(localStorage.getItem('cat_labels') || JSON.stringify(DEFAULT_LABELS));
+function saveLabels(){ localStorage.setItem('cat_labels', JSON.stringify(COLOR_LABELS)); }
+const COLOR_HEX = { accent:'#5a7e50', teal:'#4a7a68', gold:'#f0a8b0', plum:'#c9a0d4', sage:'#6a8c52', slate:'#7a5a9e' };
+const HOURS = Array.from({length:16},(_,i)=>i+7);
+
+let schedules = JSON.parse(localStorage.getItem('sch_v3') || '[]');
+let view = 'list';
+let weekOff = 0;
+let dayOff = 0;
+
+function getToday(off=0) {
+  const d = new Date(); d.setDate(d.getDate()+off);
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${m}-${dd}`;
+}
+
+if (!schedules.length) {
+  const t = getToday(), t1 = getToday(1);
+  schedules = [
+    {id:1,title:'与导师开会',date:t,startTime:'14:00',endTime:'15:00',color:'teal',reminder:0,completed:false,note:'讨论论文进展'},
+    {id:2,title:'作业提交截止',date:t,startTime:'23:59',endTime:'23:59',color:'accent',reminder:0,completed:false,note:''},
+    {id:3,title:'小组讨论',date:t1,startTime:'10:00',endTime:'11:30',color:'plum',reminder:0,completed:false,note:''}
+  ];
+  save();
+}
+
+function save() { localStorage.setItem('sch_v3', JSON.stringify(schedules)); }
+function newId() { return Date.now() + Math.random()*999|0; }
+
+function showToast(title,msg,type='success') {
+  const c=document.getElementById('toastWrap');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<div class="t-icon">${type==='reminder'?'🔔':'✅'}</div><div><div class="t-title">${title}</div><div class="t-msg">${msg}</div></div>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.transition='opacity 0.3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},3500);
+}
+
+function parseSchedule() {
+  const text = document.getElementById('inputText').value.trim();
+  if (!text) return;
+  const btn=document.getElementById('parseBtn');
+  btn.disabled=true; btn.textContent='识别中…';
+  setTimeout(() => {
+    try { showPreview(localParse(text)); }
+    catch(e) { showToast('提示','无法识别，请手动填写','reminder'); }
+    btn.disabled=false; btn.textContent='✦ 识别日程';
+  }, 200);
+}
+
+function localParse(text) {
+  const now = new Date();
+  let date = getToday();
+  if (/明天|tomorrow/i.test(text)) date = getToday(1);
+  else if (/后天/i.test(text)) date = getToday(2);
+  
+  let sh = 9, sm = 0, eh = 10, em = 0;
+  const isAfternoon = /下午|午后|晚上|pm/i.test(text);
+  
+  const timeMatch = text.match(/(\d{1,2})[：:](\d{2})/);
+  const hourMatch = text.match(/(\d{1,2})\s*[点时]/);
+
+  if (timeMatch) { sh = parseInt(timeMatch[1]); sm = parseInt(timeMatch[2]); } 
+  else if (hourMatch) { sh = parseInt(hourMatch[1]); if (/半/.test(text)) sm = 30; }
+
+  if (isAfternoon && sh < 12) sh += 12;
+  sh = Math.min(sh, 23);
+
+  let duration = 60;
+  if (/半小时/.test(text)) duration = 30;
+  
+  const startMins = sh * 60 + sm;
+  const endMins = startMins + duration;
+  eh = Math.min(Math.floor(endMins / 60), 23);
+  em = endMins % 60;
+
+  const st = `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}`;
+  const et = `${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
+
+  let color = 'teal';
+  if (/截止|ddl/i.test(text)) color = 'accent';
+  else if (/学习|上课/i.test(text)) color = 'plum';
+  else if (/运动|健身/i.test(text)) color = 'sage';
+
+  let title = text.replace(/明天|后天|今天|下午|上午|早上|晚上|中午|半小时/g, '').replace(/\d{1,2}[点时]/g, '').trim();
+  if (!title) title = "新日程";
+
+  return { title: title.slice(0,20), date, startTime: st, endTime: et, color, reminder: 0, note: '' };
+}
+
+function showPreview(d) {
+  document.getElementById('previewWrap').innerHTML=`
+  <div class="preview-card">
+    <div class="preview-hd"><span class="ai-badge">已识别</span><span class="ph">请确认日程信息</span></div>
+    <div class="preview-bd">
+      <div class="pf full"><label>日程标题</label><input type="text" id="pTitle" value="${d.title||''}"></div>
+      <div class="pf"><label>日期</label><input type="date" id="pDate" value="${d.date||getToday()}"></div>
+      <div class="pf"><label>颜色分类</label><select id="pColor">${COLORS.map(c=>`<option value="${c}"${c===d.color?' selected':''}>${COLOR_LABELS[c]}</option>`).join('')}</select></div>
+      <div class="pf"><label>开始时间</label><input type="time" id="pStart" value="${d.startTime||'09:00'}"></div>
+      <div class="pf"><label>结束时间</label><input type="time" id="pEnd" value="${d.endTime||'10:00'}"></div>
+      <div class="pf full"><label>提前提醒</label>
+        <div class="reminder-chips">${[0,5,15,30].map(m=>`<button class="r-chip${m===(d.reminder??0)?' sel':''}" onclick="selReminder(this,${m})">${m===0?'不提醒':m+'分钟前'}</button>`).join('')}</div>
+        <input type="hidden" id="pReminder" value="${d.reminder??0}">
+      </div>
+    </div>
+    <div class="preview-ft">
+      <button class="btn-cancel" onclick="cancelPreview()">取消</button>
+      <button class="btn-confirm" onclick="confirmSched()">确认</button>
+    </div>
+  </div>`;
+  document.getElementById('previewWrap').style.display='block';
+}
+
+function selReminder(el,v){
+  document.querySelectorAll('.r-chip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('pReminder').value=v;
+  if (v > 0 && 'Notification' in window) Notification.requestPermission();
+}
+
+function cancelPreview(){const pw=document.getElementById('previewWrap');pw.style.display='none';pw.innerHTML='';}
+
+function confirmSched(){
+  const s={id:newId(),title:document.getElementById('pTitle').value||'新日程',date:document.getElementById('pDate').value,startTime:document.getElementById('pStart').value,endTime:document.getElementById('pEnd').value,color:document.getElementById('pColor').value,reminder:parseInt(document.getElementById('pReminder').value),note:'',completed:false};
+  schedules.push(s);
+  schedules.sort((a,b)=>(a.date+a.startTime).localeCompare(b.date+b.startTime));
+  save(); cancelPreview();
+  document.getElementById('inputText').value='';
+  showToast(`已添加：${s.title}`,`${s.date} ${s.startTime}`,'success');
+  render();
+}
+
+function toggleMic(){
+  showToast('提示','目前网页端暂不支持语音功能','reminder');
+}
+
+function toggleDone(id){const s=schedules.find(x=>x.id===id);if(s){s.completed=!s.completed;save();render();}}
+function delSched(id){schedules=schedules.filter(x=>x.id!==id);save();render();document.getElementById('editModal')?.remove();}
+
+function setView(v){
+  view=v;
+  ['list','week','day'].forEach(k=>{
+    document.getElementById(`${k}View`).style.display=k===v?'block':'none';
+    const sn=document.getElementById(`sn-${k}`); if(sn) sn.classList.toggle('active',k===v);
+    const vt=document.getElementById(`vt-${k}`); if(vt) vt.classList.toggle('active',k===v);
+    const bn=document.getElementById(`bn-${k}`); if(bn) bn.classList.toggle('active',k===v);
+  });
+  const titles={list:'日程列表',week:'周视图',day:'日视图'};
+  document.getElementById('viewTitle').textContent=titles[v];
+  document.getElementById('inputWrap').style.display=v==='list'?'block':'none';
+  document.getElementById('previewWrap').style.display='none';
+  window.scrollTo(0,0);
+  render();
+}
+
+function openEdit(id){
+  const s = schedules.find(x=>x.id===id);
+  if(!s) return;
+  const existing = document.getElementById('editModal');
+  if(existing) existing.remove();
+  
+  const colorPicker = COLORS.map(c=>`<div class="cp-option${s.color===c?' sel':''}" style="background:${COLOR_HEX[c]}" onclick="selectEditColor(this,'${c}')"></div>`).join('');
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop'; modal.id = 'editModal';
+  modal.innerHTML = `<div class="modal">
+    <div class="modal-hd"><h3>编辑日程</h3><button class="modal-close" onclick="document.getElementById('editModal').remove()">✕</button></div>
+    <div class="modal-bd" style="gap:10px">
+      <div class="pf full"><input id="eTitle" value="${s.title}" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:16px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <input type="date" id="eDate" value="${s.date}" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:16px;">
+        <select id="eReminder" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:16px;">
+          ${[0,5,15,30].map(m=>`<option value="${m}"${s.reminder===m?' selected':''}>${m===0?'不提醒':m+'分钟前'}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <input type="time" id="eStart" value="${s.startTime}" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:16px;">
+        <input type="time" id="eEnd" value="${s.endTime}" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:16px;">
+      </div>
+      <div class="pf full"><div class="color-picker">${colorPicker}</div><input type="hidden" id="eColor" value="${s.color}"></div>
+    </div>
+    <div class="modal-ft" style="justify-content:space-between">
+      <button class="btn-cancel" style="color:var(--danger);border-color:var(--danger)" onclick="delSched(${s.id})">删除</button>
+      <div>
+        <button class="btn-cancel" onclick="document.getElementById('editModal').remove()">取消</button>
+        <button class="btn-confirm" onclick="saveEdit(${s.id})">保存</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function selectEditColor(el, color){
+  document.querySelectorAll('.cp-option').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('eColor').value = color;
+}
+
+function saveEdit(id){
+  const s = schedules.find(x=>x.id===id);
+  if(!s) return;
+  s.title = document.getElementById('eTitle').value.trim() || s.title;
+  s.date = document.getElementById('eDate').value;
+  s.startTime = document.getElementById('eStart').value;
+  s.endTime = document.getElementById('eEnd').value;
+  s.color = document.getElementById('eColor').value;
+  s.reminder = parseInt(document.getElementById('eReminder').value);
+  if (s.reminder > 0 && 'Notification' in window) Notification.requestPermission();
+  save(); 
+  document.getElementById('editModal').remove();
+  render();
+}
+
+function openCatSettings(){
+  const existing = document.getElementById('catModal');
+  if(existing) existing.remove();
+  const rows = COLORS.map(c=>`
+    <div class="cat-row">
+      <div class="cat-swatch" style="background:${COLOR_HEX[c]}"></div>
+      <input class="cat-input" data-color="${c}" value="${COLOR_LABELS[c]||c}" maxlength="10">
+    </div>`).join('');
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop'; modal.id = 'catModal';
+  modal.innerHTML = `<div class="modal">
+    <div class="modal-hd"><h3>分类设置</h3><button class="modal-close" onclick="document.getElementById('catModal').remove()">✕</button></div>
+    <div class="modal-bd">${rows}</div>
+    <div class="modal-ft">
+      <button class="btn-cancel" onclick="document.getElementById('catModal').remove()">取消</button>
+      <button class="btn-confirm" onclick="saveCatSettings()">保存</button>
+    </div>
+  </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveCatSettings(){
+  document.querySelectorAll('.cat-input').forEach(inp=>{
+    const c = inp.dataset.color;
+    if(c && inp.value.trim()) COLOR_LABELS[c] = inp.value.trim();
+  });
+  saveLabels();
+  document.getElementById('catModal').remove();
+  render();
+}
+
+function render(){renderUpcoming();if(view==='list')renderList();else if(view==='week')renderWeek();else renderDay();}
+
+function renderUpcoming(){
+  const today=getToday();
+  const items=schedules.filter(s=>!s.completed&&s.date>=today).sort((a,b)=>(a.date+a.startTime).localeCompare(b.date+b.startTime)).slice(0,5);
+  const el=document.getElementById('upcomingList');
+  if(!items.length){el.innerHTML=`<div style="padding:10px 20px;font-size:12px;color:var(--ink3)">暂无日程</div>`;return;}
+  el.innerHTML=items.map(s=>{
+    const hex=COLOR_HEX[s.color];
+    return `<div class="up-item" onclick="setView('list')" style="--bc:${hex}"><style>.up-item[style*="${hex}"]::before{background:${hex}}</style><div class="up-date">${s.date===today?'今天':s.date} ${s.startTime}</div><div class="up-title">${s.title}</div></div>`;
+  }).join('');
+}
+
+function renderList(){
